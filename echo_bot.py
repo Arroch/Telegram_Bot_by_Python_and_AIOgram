@@ -2,8 +2,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.types import Message
 
-# Вместо BOT TOKEN HERE нужно вставить токен вашего бота, полученный у @BotFather
-API_TOKEN: str = ''
+with open("token.txt", 'r') as token:
+    API_TOKEN: str = token.readline()
 
 # Создаем объекты бота и диспетчера
 bot: Bot = Bot(token=API_TOKEN)
