@@ -80,7 +80,36 @@ async def process_start_game(message: Message):
 
 @dp.message(lambda x: x.text and x.text.isdigit() and 1 <= int(x.text) <= 100)
 async def process_game(message: Message):
-    pass
+    if users[message.from_user.id]['in_game']:
+        if int(message.text) == users[message.from_user.id]['secret_number']:
+            await message.answer('Great!!! You have guessed the number!\n\nPlay again?')
+            users[message.from_user.id]['in_game'] = False
+            users[message.from_user.id]['total_games'] += 1
+            users[message.from_user.id]['wins'] += 1
+        elif int(message.text) < users[message.from_user.id]['secret_number']:
+            await message.answer('My number is greater')
+            users[message.from_user.id]['attempts'] -= 1
+        elif int(message.text) > users[message.from_user.id]['secret_number']:
+            await message.answer('My number is lesser')
+            users[message.from_user.id]['attempts'] -= 1
+
+        if users[message.from_user.id]['attempts'] == 0:
+            await message.answer(f'Unfortunately, you have no more attempts.'
+                                 f'You lose :(\n\nMy number was '
+                                 f'{users[message.from_user.id]["secret_number"]}'
+                                 f'\n\nPlay again?')
+            users[message.from_user.id]['in_game'] = False
+            users[message.from_user.id]['total_games'] += 1
+    else:
+        await message.answer('We are not play yet(\nLet`s play?')
+
+
+@dp.message()
+async def process_other_answers(message: Message):
+    if users[message.from_user.id]['in_game']:
+        await message.answer('We`re playing now. Send me a number from 1 to 100.')
+    else:
+        await message.answer('I`m simple Bot. Let`s just play the game?')
 
 
 if __name__ == '__main__':
