@@ -4,9 +4,12 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import Text, Command
 
+import os
+import dotenv
+
 # Read Telegram Bot API token
-with open('token.txt', 'r') as token:
-    token_bot: str = token.readline()
+dotenv.load_dotenv()
+token_bot: str = os.getenv('token_bot')
 
 bot: Bot = Bot(token_bot)
 dp: Dispatcher = Dispatcher()
